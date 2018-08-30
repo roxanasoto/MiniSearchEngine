@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>MiniGoogle</title> 
+    <link rel="stylesheet" type = "text/css" href="css/style.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script>
+    function cleardata() {
+      location.reload();
+
+/*
+      var SearchControl = document.getElementById('SBox');
+      var ColorChange = document.getElementById('color');
+      var Respuesta = document.getElementById('respuesta');
+      search.value = "";
+      SearchControl.style.visibility = "visible";
+      SearchControl.style.opacity = "1";
+      Respuesta.style.visibility = "hidden";*/
+    }
+    function searchbox() {
+      var url = "data.php";
+      var SearchControl = document.getElementById('SBox');
+      var ColorChange = document.getElementById('color');
+      var Respuesta = document.getElementById('respuesta');
+      SearchControl.style.visibility = "hidden";
+      SearchControl.style.opacity = "0";
+      Respuesta.style.visibility = "visible";
+      $.ajax({
+         type: "POST",
+         url: url,
+         data: $("#formulario").serialize(),
+         success: function(data)
+         {
+             $("#respuesta").html(data);
+             $('#tabla_respuesta').DataTable();
+         }
+       });
+    }
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="media/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="resources/syntax/shCore.css">
+    <style type="text/css" class="init">  </style>
+    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.3.min.js"> </script>
+    <script type="text/javascript" language="javascript" src="media/js/jquery.dataTables.js"> </script>
+    <script type="text/javascript" language="javascript" src="resources/demo.js"> </script>   
+  </head>
+  <body>
+    <nav class="navigation">
+      <div class="container">
+        <span class="title">
+          <i class="fa fa-home"></i> Wikipedia Search Engine
+        </span> 
+        <span class="search-control"  onclick="cleardata()">
+          Search <a style="font-family:fontawesome;"></a>
+        </span>
+      </div>
+    </nav>
+    
+    <div class="container">
+      <form id="formulario">
+        <div class="search-box" id="SBox">
+          <input name="search" id="search" placeholder="Search..." type="text">
+          <div class="also search-link" onclick="searchbox()" id="searchclick"></div>
+          
+        </div>
+      </form>
+      <div id="respuesta"> </div>
+      
+    </div>
+  </body>
+</html>
