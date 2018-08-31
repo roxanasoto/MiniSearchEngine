@@ -84,6 +84,7 @@ ciertos
 cinco
 claro
 comentó
+com
 como
 con
 conmigo
@@ -712,6 +713,7 @@ vuestras
 vuestro
 vuestros
 w
+www
 x
 y
 ya

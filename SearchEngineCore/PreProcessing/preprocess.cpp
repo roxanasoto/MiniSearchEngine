@@ -36,25 +36,41 @@ vector<string> GetDirectoryFiles(const string& dir)
 }
 
 int main()
-{	
-	Parser *parser = new Parser();
-	WordList *wordlist = new WordList();
-	parser->ReadRawData();	
-	parser->LoadStopWords("../stopWords.txt");
+{
+	//Timing
+	clock_t start, end;
 
+	Parser *parser = new Parser();
+	
+	start = clock();
+	parser->ReadRawData();	
+	end = clock();
+	cout<<"Reading Raw Data: "<<(end-start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+	
+
+	start = clock();
+	parser->LoadStopWords("../stopWords.txt");
+	end = clock();
+	cout<<"Loading StopWords: "<<(end-start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+	
 	string directory_path = string("../../../../Docs");
   	vector<string> files = GetDirectoryFiles(directory_path);
 
+	int currentDocId = 0;
+	cout<<" - Amount of files: "<<files.size()<<endl;
+	start = clock();	
 	for(int i = 0; i<files.size(); ++i)
 	{		
 		if(files[i].compare(".") != 0 && files[i].compare("..") != 0){			
-			wordlist->docId = stoi(files[i].substr(0,files[i].length() -4));	
-			wordlist->wordList = parser->ParseFile(directory_path+"/"+to_string(wordlist->docId)+".txt");
+			currentDocId = stoi(files[i].substr(0,files[i].length() -4));	
+			parser->ParseFile(directory_path+"/"+to_string(currentDocId)+".txt");
 			//Ready for insert into the Tree
-			InsertWords(wordlist);
-			wordlist->docId = 0;
-			wordlist->wordList = {};			
+			//InsertWords(wordlist);
+			//cout<<"File: "<<currentDocId <<" processed!"<<endl;			
 		}		
 	}
+	end = clock();
+	cout<<"Parsing files: "<<(end-start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+	
 	return 0;
 }

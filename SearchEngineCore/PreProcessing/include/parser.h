@@ -23,7 +23,7 @@ class Parser
 
 		bool ReadRawData();	
 		bool LoadStopWords(string fileName);		
-		map<string, int> ParseFile(string _inputFile);
+		void ParseFile(string _inputFile);
 		bool IsStopWord(string word);
 		void PreProcessWord(string &word);
 		bool IsMark(char sign);		
