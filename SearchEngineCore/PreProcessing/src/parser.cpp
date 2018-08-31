@@ -142,9 +142,10 @@ map<string, int> Parser::ParseFile(string _inputFile)
 		    }
             iss.clear(); 
         }while(!ifs.eof());
+        ifs.close();       
 
-        cout<<endl;
-        ifs.close();            
+		//** Empezar a escribir el archivo con el map wordList
+		     
 	}
     else{
         cout<<"ERROR opening the file" <<endl;        

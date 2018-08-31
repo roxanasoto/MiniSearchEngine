@@ -6,6 +6,7 @@
 
 using namespace std;
 
+///*** Insert Words into a file
 void InsertWords(WordList *wl)
 {
 	cout<<"Doc Id: "<<wl->docId<<endl;
@@ -17,6 +18,7 @@ void InsertWords(WordList *wl)
 	cout<<endl;
 }
 
+///*** Get all files in directory "Docs"
 vector<string> GetDirectoryFiles(const string& dir) 
 {
   vector<string> files;
