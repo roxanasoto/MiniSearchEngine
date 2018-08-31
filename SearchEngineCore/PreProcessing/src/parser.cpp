@@ -172,7 +172,7 @@ void Parser::ParseFile(string _inputFile)
     	           ofs << it->first << " " << it->second << '\n';
 	            }
             }
-            ofs<<" / ";
+            ofs<<"/";
             ofs.close();
         }
         else{
@@ -254,7 +254,7 @@ void Parser::LoadWordListFile()
                 map<string, int>::iterator it_ins = wordsList.begin();
                 WordList* wordListObj = new WordList();
                 getline(ifs, docId);
-                if(docId.compare(" ") != 0){
+                if(docId.compare(" ") != 0 && docId.compare("") != 0){
                     getline(ifs, line_content, '/');            
                     iss.str(line_content);
                     while(iss >> word){                    
@@ -272,10 +272,9 @@ void Parser::LoadWordListFile()
                     //cout<<"Amount of Words: "<<wordListObj->wordList.size()<<endl;
                     iss.clear();
                     wordsList = {};                    
-                    //cout<<++count<<endl;
+                    cout<<++count<<endl;
                 }
-            }
-        
+            }        
 	}
     else{
         cout<<"ERROR opening the file" <<endl;        
