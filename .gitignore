@@ -1,0 +1,5 @@
+/Tmp
+/build
+.vscode
+test.cpp
+/SearchEngineCore/PreProcessing/build
