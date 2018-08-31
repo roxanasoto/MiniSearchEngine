@@ -9,9 +9,12 @@
 
 using namespace std;
 
-Parser::Parser(){
+Parser::Parser(){}
+
+Parser::Parser(string outputFile){
     //Create OutputFile
-    ofstream ofs("../../../../WordList2.txt");
+    string path = "../../../../"+outputFile;
+    ofstream ofs(outputFile);
 
 	if (!ofs.good()){		
 		cout << "Something went wrong while creating WordList.txt file!";
@@ -142,8 +145,7 @@ void Parser::ParseFile(string _inputFile)
                     if (it_srch != wordsList.end()){  
                         if(is_title){
                             //Second line is title, should weigth more
-                            (*it_srch).second += 2;                              
-                            is_title = false; 
+                            (*it_srch).second += 2;                                                          
                         }
                         (*it_srch).second += 1;    
                     }
@@ -154,6 +156,8 @@ void Parser::ParseFile(string _inputFile)
 			    }
 		    }
             iss.clear(); 
+            if(is_title)
+                is_title = false; 
         }while(!ifs.eof());
         ifs.close();       
 

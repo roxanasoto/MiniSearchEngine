@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.9)
+set (CMAKE_CXX_STANDARD 11)
+project(SearchEngine)
+include_directories(../PreProcessing/include)
+set(SOURCES ../PreProcessing/src/wordlist.cpp ../PreProcessing/src/parser.cpp engine.cpp)
+add_executable(engine ${SOURCES})
+target_link_libraries(engine)

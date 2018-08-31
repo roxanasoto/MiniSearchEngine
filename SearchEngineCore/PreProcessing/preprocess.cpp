@@ -40,7 +40,8 @@ int main()
 	//Timing
 	clock_t start, end;
 
-	Parser *parser = new Parser();
+	//Parser *parser = new Parser();
+	Parser *parser = new Parser("WordList.txt");
 	
 	/*start = clock();
 	parser->ReadRawData();	

@@ -19,6 +19,7 @@ class Parser
 		
 	public:
 		Parser();
+		Parser(string outputFile);
 		~Parser();
 
 		bool ReadRawData();	
