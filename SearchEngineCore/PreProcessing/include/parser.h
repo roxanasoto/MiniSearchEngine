@@ -28,4 +28,6 @@ class Parser
 		void PreProcessWord(string &word);
 		bool IsMark(char sign);		
 		bool TakeOffMark(char &sign);
+		void LoadWordListFile();
+		void PrintWordList(vector<WordList*> aWordList);
 };

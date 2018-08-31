@@ -10,5 +10,5 @@ class WordList
 		map<string, int> wordList;
 
         WordList();
-		~WordList();
+        ~WordList();
 };

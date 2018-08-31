@@ -10,10 +10,10 @@
 using namespace std;
 
 Parser::Parser(){
-    ofstream ofs("../../../../WordList.txt");
+    //Create OutputFile
+    ofstream ofs("../../../../WordList2.txt");
 
-	if (!ofs.good())
-	{		
+	if (!ofs.good()){		
 		cout << "Something went wrong while creating WordList.txt file!";
 	}
     ofs.close();
@@ -168,7 +168,7 @@ void Parser::ParseFile(string _inputFile)
     	           ofs << it->first << " " << it->second << '\n';
 	            }
             }
-            ofs<<"/"<<endl;
+            ofs<<" / ";
             ofs.close();
         }
         else{
@@ -230,6 +230,54 @@ void Parser::PreProcessWord(string &word)
 		}
 	}
     //cout<<"word out: "<<word<<endl;	
+}
+
+void Parser::LoadWordListFile()
+{
+    cout<<"LoadWordListFile"<<endl;
+    vector<WordList*> wordsListVector;
+    ifstream ifs;
+    int count = 0;
+    map<string, int> wordsList;
+    ifs.open("../../../../WordList.txt");    
+    if (ifs.is_open()){
+        string docId, word, frecuency, line_content;				
+        istringstream iss;
+
+            while (!ifs.eof()){
+                docId = "";  
+                line_content = "";          
+                map<string, int>::iterator it_ins = wordsList.begin();
+                WordList* wordListObj = new WordList();
+                getline(ifs, docId);
+                if(docId.compare(" ") != 0){
+                    getline(ifs, line_content, '/');            
+                    iss.str(line_content);
+                    while(iss >> word){                    
+                        iss >> frecuency;
+                        //cout<<"word: " <<word <<" frecuency: "<<frecuency<<endl;
+                        wordsList.insert(it_ins, pair<string,int>(word,stoi(frecuency)));
+                        it_ins++;                                                                
+                    }
+                    iss>>word;
+                    wordListObj->docId = stoi(docId);
+                    wordListObj->wordList = wordsList;
+                    wordsListVector.push_back(wordListObj);
+                    
+                    //cout<<"Doc Id: "<<wordListObj->docId<<endl;
+                    //cout<<"Amount of Words: "<<wordListObj->wordList.size()<<endl;
+                    iss.clear();
+                    wordsList = {};                    
+                    //cout<<++count<<endl;
+                }
+            }
+        
+	}
+    else{
+        cout<<"ERROR opening the file" <<endl;        
+    }
+
+    cout<<"N: "<<wordsListVector.size()<<endl;
 }
 
 Parser::~Parser()
