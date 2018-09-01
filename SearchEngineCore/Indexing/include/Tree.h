@@ -18,6 +18,10 @@ private:
 	int idLastDoc;
 	
 	int contador;
+	string residuo;
+	int avance;
+	bool miss=false;
+	string missword;
 public:
 Cloud* cloud;
 	Tree();
@@ -52,5 +56,10 @@ Cloud* cloud;
 	void LoadCloud(string);
 	void printCloud();
 	vector<int> search_sentence(vector<string> keys);
+	int distanceHamming(string key, string keynew);
+	int searchPrefix(string key);/******************************************************* Add Roxana******************/
+	void searchRecursive(string key, Node* rpta, vector<string> &suggestionsRec );/******************************************************* Add Roxana******************/
+	void searchMRecursive(string key, Node* rpta, vector<string> &suggestionsRec );/******************************************************* Add Roxana******************/
+	int searchMiss(string key);
 	// bool Insert(Word);
 };

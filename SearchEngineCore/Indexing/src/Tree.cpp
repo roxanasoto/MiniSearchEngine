@@ -208,6 +208,94 @@ vector<int> Tree::search_sentence(vector<string> keys){
 	}
 	return results;
 }
+/*******************************************************INCIO Add Roxana******************/
+int Tree::searchPrefix(string key){
+	Node* rpta =Find(root, key);
+	vector<string> suggestionsRec;
+	//verificar que falta completar
+	if(rpta != 0){
+		cout<<key<<endl;
+		cout<<residuo<<endl;
+    	searchRecursive(key+residuo,rpta->Child(),suggestionsRec);
+	}
+	else
+		cout<<"no hay más que buscar";
+    
+    return suggestionsRec.size();
+}
+
+int Tree::distanceHamming(string a, string b){
+	int tam = a.size() < b.size() ? a.size() : b.size();
+	int count = a.size() < b.size() ?b.size()-a.size():a.size()-b.size();
+	for (size_t i = 0; i < tam; i++)
+	{
+		if (a.at(i) ^ b.at(i))
+			count++;
+	}
+	return count;
+}
+void Tree::searchRecursive(string key, Node* rpta, vector<string> &suggestionsRec ){
+	string keynew=key + rpta->GetKey();
+	if(suggestionsRec.size() >= 21){
+		return;
+	}
+    if(rpta->noTuples() > 0){
+    	cout<<keynew<<endl;
+    	suggestionsRec.push_back(keynew);
+    }
+    if(rpta->Brother() !=NULL){
+    	searchRecursive(key,rpta->Brother(),suggestionsRec);
+	}
+    if(rpta->Child() !=NULL){
+	    searchRecursive(keynew,rpta->Child(),suggestionsRec);
+	}
+}
+
+void Tree::searchMRecursive(string key, Node* rpta, vector<string> &suggestionsRec ){
+
+	string keynew=key + rpta->GetKey();
+	if(suggestionsRec.size() >= 21){
+		return;
+	}
+    if(rpta->noTuples() > 0){
+    	
+    	if(distanceHamming(missword,keynew)<4)
+    	{
+    		cout<<keynew<<endl;
+    		//cout<<missword<<"+"<<keynew<<"="<<distanceHamming(missword,keynew)<<endl;
+    		suggestionsRec.push_back(keynew);
+    	}
+    }
+    if(rpta->Brother() !=NULL){
+    	searchMRecursive(key,rpta->Brother(),suggestionsRec);
+	}
+    if(rpta->Child() !=NULL){
+	    searchMRecursive(keynew,rpta->Child(),suggestionsRec);
+	}
+}
+
+int Tree::searchMiss(string key){
+
+	avance=0;
+	Node* rpta =Find(root, key);
+	vector<string> suggestionsRec;
+	//verificar que no encontro
+	missword=key;
+	key=key.substr(0,avance);
+	rpta =Find(root, key);
+	if(rpta != 0){
+		cout<<key<<endl;
+		cout<<residuo<<endl;
+		
+    	searchMRecursive(key,rpta->Child(),suggestionsRec);
+	}
+	else
+		cout<<"no hay más que buscar";
+    
+    return suggestionsRec.size();
+}
+/*******************************************************FIN Add Roxana******************/
+
 Node* Tree::Find(string key) {
 	//cout<<"Buscando: "<<key<<"..."<<endl;
 	Node* rpta = Find(root, key);
@@ -223,9 +311,17 @@ Node* Tree::Find(Node* node, string key) {
 	}
 	unsigned int k = Prefix(key, node->GetKey());
 	if (k == 0) {//cadenas diferentes
-		return Find(node->Brother(), key); // let�s look for the child�s node
+		if(node->Brother()){
+			return Find(node->Brother(), key); // let�s look for the child�s node
+		}
+		else{
+			residuo=node->GetKey();
+			return node;
+		}
 	} if (k < node->GetLength()) {//el nodo actual no esta particionado para el prefijo buscado
-		return 0;
+		//cout<<k<<" "<<node->GetLength()<<endl;
+		residuo=node->GetKey().substr(k);//ADD..........................................................    Rox
+		return node;//ADD................................................................................    Rox
 	} if (k == key.length()) {
 		// if(node->noTuples()>0)
 		if(node->GetCounter()!=-1)
