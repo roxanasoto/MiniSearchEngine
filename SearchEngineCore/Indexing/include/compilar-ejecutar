@@ -1,0 +1,13 @@
+Crear carpeta build
+desde una terminal moverce a la carpeta buil antes creada
+ejecute el comando:
+    cmake .. (si no tiene instalado cmake...instalalo!!!)
+    make
+
+moverse a la carpeta build y ejecutar:
+    ./main_exe
+
+para recompilar:
+ejecute:
+    make
+    ./main_exe

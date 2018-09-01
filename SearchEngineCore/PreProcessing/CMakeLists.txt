@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 set (CMAKE_CXX_STANDARD 11)
 project(PreProcessing)
-include_directories(include)
+include_directories(../PreProcessing/include include)
 set(SOURCES src/wordlist.cpp src/parser.cpp preprocess.cpp)
 add_executable(preprocess ${SOURCES})
 target_link_libraries(preprocess)

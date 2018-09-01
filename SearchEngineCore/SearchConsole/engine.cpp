@@ -14,6 +14,7 @@
 #include <memory>
 #include <limits>
 
+#include "../Indexing/include/Tree.h"
 #include "../PreProcessing/include/parser.h"
 using namespace std;
 
@@ -23,6 +24,7 @@ map<int,string> optionsList;    //** optionsList >> lista de Coincidencias map<i
 string searchQuery = "";        //** stores last query made
 string sumaryResult = "";       //** stores last result gotten
 Parser* parser = new Parser();  //** helper
+Tree* trie2 = new Tree();       //** search engine structure
 
 ///*** WARNING!! directory_path is important to exist!
 const string directory_path = string("../../../../Docs");
@@ -48,8 +50,13 @@ int main()
 void LoadIndex()
 {
     cout<<"Indexing...";
-    usleep(1000000);
+    
+    string persistence_tree = "persistence_tree.txt";
+	string persistence_cloud = "persistence_cloud.txt";
+    trie2->Load(persistence_tree);
+    trie2->LoadCloud(persistence_cloud);
     cout<<" Done!"<<endl;
+	
 }
 
 vector<int> GetDirectoryFiles(const string& dir) 
@@ -77,20 +84,38 @@ vector<int> GetDirectoryFiles(const string& dir)
 }
 
 void MakeSearch(vector<string>& queryWords)
-{
-    listIds = GetDirectoryFiles(directory_path);
-    //list.push_back(32449);
-    /*list.push_back(2323);
-    list.push_back(3123);
-    list.push_back(4232);
-    list.push_back(1235);
-    list.push_back(6123);
-    list.push_back(7123);
-    list.push_back(1238);
-    list.push_back(9131);
-    list.push_back(101323);*/
-    //usleep(1000000);
-    //cout<<"Ids done!"<<endl;
+{    
+	clock_t start_l,end_l;
+	start_l = clock();
+	
+	end_l = clock();
+    listIds = {};
+	//cout<<"Total Time Processing (loading): "<<(end_l - start_l)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+	
+// 	// cout<<"----printing trie2---------"<<endl;
+// 	// trie2->printTree();
+
+	//cout<<"----probando load cloud---------"<<endl;
+	
+	// trie2->printCloud();
+
+// 	cout<<"----test busqueda(n palabras)---------"<<endl;
+// 	vector<string> oracion; oracion.push_back("historia"); oracion.push_back("computacion");
+// 	trie2->search_sentence(oracion);
+
+
+	//cout<<"----test busqueda(1 palabras)---------"<<endl;
+//	cout<<"----test busqueda(n palabras)---------"<<endl;
+ 	//vector<string> oracion; 
+    //oracion.push_back("historia"); oracion.push_back("computacion");
+ 	if(queryWords.size() == 1){
+         Node* rpta = trie2->Find(queryWords[0]);    
+        Row row = trie2->cloud->getRow(rpta->GetCounter());
+        listIds = row.docs;
+    }
+    else{
+        listIds = trie2->search_sentence(queryWords);
+    }
 }
 
 void Search(bool flag){
@@ -149,12 +174,14 @@ void ShowTenResults(){
     optionsList = {};
     map<int,string>::iterator it_ins = optionsList.begin();    
     
-    int index;
+    int index, max = 10;
     cout<< "  [ID] TITULO DE DOCUMENTO"<<endl;
-    for(int i = 1 ; i <= 10; ++i){
+    if(listIds.size() < 10)
+        max = listIds.size();
+    for(int i = 1 ; i <= max; ++i){
         index = (10*page)+i;
         string filepath = directory_path +"/"+to_string(listIds[index])+".txt"; 
-        //cout<<path;
+        //cout<<"filepath: "<<filepath;
         ifs.open(filepath);
 
         cout<< "  ["<<index<<"]   ";
@@ -181,7 +208,7 @@ void ShowTenResults(){
     
 }
 
-void ShowContent(int docId)
+void ShowContent(string docId)
 {
     system(CLEAR);
     //cout<<"Show Content of "<< to_string(docId)<< endl;
@@ -190,9 +217,9 @@ void ShowContent(int docId)
     //cout<< "  [ID] TITULO DE DOCUMENTO"<<endl;
     //for(int i = 1 ; i <= 10; ++i){
         //index = (10*page)+i;
-        //string filepath = directory_path +"/"+to_string(docId)+".txt"; 
-        string filepath = directory_path +"/20559.txt"; 
-        //cout<<path;
+        string filepath = directory_path +"/"+docId+".txt"; 
+        //string filepath = directory_path +"/20559.txt"; 
+        //cout<<filepath;
         ifs.open(filepath);
 
         //cout<< "  ["<<index<<"]   ";
@@ -238,8 +265,8 @@ void ShowMenu(bool flag)
             case 'o':
             case 'O':
                 cout <<"\nIngrese [ID] de documento: >> ";
-                cin >> optionDocIndex; 
-                ShowContent(optionDocIndex);
+                cin >> optionDocIndex;                 
+                ShowContent(optionsList[optionDocIndex]);
                 ShowMenu(false);            
             break;
 

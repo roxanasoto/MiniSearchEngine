@@ -1,7 +1,12 @@
 /Tmp
-/build
 .vscode
-test.cpp
 /SearchEngineCore/PreProcessing/build
 /SearchEngineCore/SearchConsole/build
 /SearchEngineCore/Indexing/build
+
+SearchEngineCore/Indexing/main_sol.cpp
+SearchEngineCore/Indexing/test
+SearchEngineCore/Indexing/test2.cpp
+
+SearchEngineCore/Indexing/Docs-mini/
+SearchEngineCore/Indexing/Docs/
