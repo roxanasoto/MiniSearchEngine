@@ -12,6 +12,7 @@
 #include <vector>
 #include <dirent.h>
 #include <memory>
+#include <limits>
 
 #include "../PreProcessing/include/parser.h"
 using namespace std;
@@ -32,14 +33,15 @@ void MakeSearch(vector<string>& queryWords);
 void Search(bool flag);    
 void ShowTenResults();
 void ShowContent(int docId);
-void ShowMenu();
+void ShowMenu(bool flag);
 
 int main()
 {        
     LoadIndex();
+    cout<<"Presione ENTER...";
     Search(true);
-    ShowTenResults();
-    ShowMenu();
+    //ShowTenResults();
+    //ShowMenu(true);
     return 0;
 }
 
@@ -105,9 +107,11 @@ void Search(bool flag){
         
         page = 0;
         optionsList = {};
-                
+        cin.ignore( numeric_limits<streamsize>::max(), '\n' );
         cout <<"\nBUSCAR: ";
+        
         getline(cin, query);
+        
         iss.str(query);
         
         while (iss >> word) {
@@ -127,9 +131,9 @@ void Search(bool flag){
                         to_string((end-start)/(double)CLOCKS_PER_SEC) +" seconds)";
 
         cout<<sumaryResult<<endl<<endl;
-
+        cin.clear();
         ShowTenResults();
-        ShowMenu();            
+        ShowMenu(true);            
     }
     else{
         cout <<"\nBUSCAR: "<<searchQuery<<endl<<endl;
@@ -142,7 +146,7 @@ void Search(bool flag){
 
 void ShowTenResults(){
     ifstream ifs;
-
+    optionsList = {};
     map<int,string>::iterator it_ins = optionsList.begin();    
     
     int index;
@@ -179,60 +183,123 @@ void ShowTenResults(){
 
 void ShowContent(int docId)
 {
-    cout<<"Show Content of "<< to_string(docId)<< endl;
-}
+    system(CLEAR);
+    //cout<<"Show Content of "<< to_string(docId)<< endl;
+    ifstream ifs;
+    int index;
+    //cout<< "  [ID] TITULO DE DOCUMENTO"<<endl;
+    //for(int i = 1 ; i <= 10; ++i){
+        //index = (10*page)+i;
+        //string filepath = directory_path +"/"+to_string(docId)+".txt"; 
+        string filepath = directory_path +"/20559.txt"; 
+        //cout<<path;
+        ifs.open(filepath);
 
-void ShowMenu()
-{    
-    char optionMenu;
-    int optionDocIndex;
-    cout<<endl;
-    cout<<" >> [O] Ingresar opcion \n"
-        <<" >> [S] Mostrar siguiente \n"
-        <<" >> [A] Mostrar anterior \n"
-        <<" >> [V] Volver a buscar "<<endl<<endl << " >> ";
-    cin>> optionMenu;
-    switch(optionMenu){
-        case 'o':
-        case 'O':
-            cout <<"\nIngrese [ID] de documento: >> ";
-            cin >> optionDocIndex; 
-            ShowContent(optionDocIndex);
-        break;
-
-        case 's':
-        case 'S':
-            page++;
-            Search(false);
-            ShowTenResults();
-            ShowMenu();            
-        break;
-
-        case 'a':
-        case 'A':
-            if(page > 0){
-                page--;
-                Search(false);
-                ShowTenResults(); 
-                ShowMenu();          
+        //cout<< "  ["<<index<<"]   ";
+        
+            if (ifs.is_open()){
+                bool is_title = true;
+                string word, doc_id, line_content;
+                getline(ifs, doc_id); 
+                istringstream iss;		            
+                while(!ifs.eof()){                    
+                    getline(ifs, line_content);  
+                    iss.str(line_content);
+                    if((line_content.compare(" ") != 0) && ((line_content.compare("") != 0))){
+                        while(iss >> word){                    
+                            cout<<word <<" ";
+                        }
+                        iss.clear();
+                    }
+                    cout<<endl;                    
+                } 
+                ifs.close();      
             }
             else{
+                cout<<"File not found!"<<endl;
+            }    
+        
+    //}
+}
+
+void ShowMenu(bool flag)
+{   
+    if(flag){ 
+        char optionMenu;
+        int optionDocIndex;
+        cout<<endl;
+        cout<<" >> [O] Ingresar opcion \n"
+            <<" >> [S] Mostrar siguiente \n"
+            <<" >> [A] Mostrar anterior \n"
+            <<" >> [V] Volver a buscar \n"
+            <<" >> [E] Salir "<<endl<<endl << " >> ";
+        cin>> optionMenu;
+        switch(optionMenu){
+            case 'o':
+            case 'O':
+                cout <<"\nIngrese [ID] de documento: >> ";
+                cin >> optionDocIndex; 
+                ShowContent(optionDocIndex);
+                ShowMenu(false);            
+            break;
+
+            case 's':
+            case 'S':
+                page++;
+                Search(false);
+                ShowTenResults();
+                ShowMenu(true);            
+            break;
+
+            case 'a':
+            case 'A':
+                if(page > 0){
+                    page--;
+                    Search(false);
+                    ShowTenResults(); 
+                    ShowMenu(true);          
+                }
+                else{
+                    Search(true);
+                    //ShowTenResults(); 
+                    //ShowMenu();  
+                }
+            break;
+            
+            case 'v':
+            case 'V':
                 Search(true);
                 //ShowTenResults(); 
                 //ShowMenu();  
-            }
-        break;
-        
-        case 'v':
-        case 'V':
-            Search(true);
-            //ShowTenResults(); 
-            //ShowMenu();  
-        break;
+            break;
 
-        default:
-            Search(true);
-            //ShowTenResults(); 
-            //ShowMenu();  
+            case 'e':
+            case 'E':
+                return;
+            break;
+
+            default:
+                Search(true);
+                //ShowTenResults(); 
+                //ShowMenu();  
+        }
+    }
+    else{
+        char optionMenu;
+        int optionDocIndex;
+        cout<<endl;
+        cout<<" >> [V] Volver "<<endl<<endl << " >> ";
+        cin>> optionMenu;
+        switch(optionMenu){            
+            case 'v':
+            case 'V':
+                Search(false);
+                ShowTenResults(); 
+                ShowMenu(true);  
+            break;
+
+            default:
+                Search(true);                
+        }
     }
 }

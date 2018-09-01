@@ -3,3 +3,5 @@
 .vscode
 test.cpp
 /SearchEngineCore/PreProcessing/build
+/SearchEngineCore/SearchConsole/build
+/SearchEngineCore/Indexing/build
