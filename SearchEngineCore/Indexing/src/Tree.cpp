@@ -303,6 +303,9 @@ Node* Tree::Find(string key) {
 		Row row = cloud->getRow(rpta->GetCounter());
 		//print_vector(row.docs);
 	}
+	else{
+		searchMiss(key);
+	}
 	return rpta;
 }
 Node* Tree::Find(Node* node, string key) {
