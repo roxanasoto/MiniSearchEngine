@@ -43,12 +43,12 @@ int main()
 	Parser *parser = new Parser();
 	//Parser *parser = new Parser("WordList.txt");
 	
-	/*start = clock();
+	start = clock();
 	parser->ReadRawData();	
 	end = clock();
 	cout<<"Reading Raw Data: "<<(end-start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
 	
-	start = clock();
+	/*start = clock();
 	parser->LoadStopWords("../stopWords.txt");
 	end = clock();
 	cout<<"Loading StopWords: "<<(end-start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
@@ -71,7 +71,7 @@ int main()
 	}
 	end = clock();
 	cout<<"Parsing files: "<<(end-start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
-	*/
-	parser->LoadWordListFile();
+	
+	parser->LoadWordListFile();*/
 	return 0;
 }
