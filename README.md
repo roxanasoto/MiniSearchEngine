@@ -20,6 +20,14 @@ Ingresar a Readme.md de cada carpeta.
 
 Para la ejecución del programa, leer las indicaciones del siguiente archivo
 ---------------------------------------------------------------------------
+Para ejecutar el programa debe seguir los siguientes pasos:
+- Paso 1: Descargar el dataset de palabras a indexar.
+- Paso 2: Ejecutar el modulo de preprocesamiento.
+- Paso 3: Descargar los archivos necesarios para el indexamiento.
+- Paso 4: Ejecutar la aplicacion.
+
+Explicacion
+-----------
 
 MiniSearchEngine/SearchEngineCore/SearchConsole/README.md
 
