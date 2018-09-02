@@ -34,22 +34,26 @@ Descargue el dataset del siguiente link:
 
 - https://drive.google.com/file/d/1W0-ZMqYqAWzZt-vHHh7xg5exrZKOsVlS/view
 
-Descomprima el archivo comprimido en la carpeta que creo en el paso 0.
+A continuacion descomprima el archivo en la carpeta que creo en el paso 0. En esta misma carpeta cree una nueva carpeta con el nombre "Docs".
 
 ## Paso 2: Ejecute el modulo de preprocesamiento.
+- Dirijase a la carpeta "MiniSearchEngine/SearchEngineCore/PreProcessing/" y cree en esta misma una carpeta con el nombre "build" (sin comillas).
+- Abra una terminal y dirijase a la carpeta build que creo anteriormente. (Use el comando "cd ").
+- En la terminal ejecute el comando: "cmake .." (Sin comillas. Es necesario que tenga instalado cmake).
+- A continuacion ejecute el comando: "make .." (este comando generara un ejecutable con nombre: "preprocess")
+- Ejecute el ejecutable antes creado con el comando: "./preprocess". Este comando creara documentos en la carpeta "Docs" que creo en el paso 1.
 
 ## Paso 3: Descargue los archivos necesarios para el indexamiento.
+- Dirijase a la carpeta: MiniSearchEngine/SearchEngineCore/SearchConsole/ y cree en esta una carpeta con el nombre "build".
+- Descargue los siguientes dos archivos .txt del siguiente link: https://drive.google.com/open?id=1r8PSI-kIWigYTcvldp7w1YSb17SRLNuE
+
+- Guarde los archivos descargados en la carpeta build que creo anteriormente.
+- Abra una terminal y dirijase (con el comando cd) a la carpeta build que creo anteriormente.
+- En la terminal ejecute el comando: "cmake .." (Sin comillas. Es necesario que tenga instalado cmake).
+- A continuacion ejecute el comando: "make .." (este comando generara un ejecutable con nombre: "engine")
+
 
 ## Paso 4: Ejecute la aplicacion
+- Ejecute el ejecutable antes creado en la carpeta buid con el comando: "./engine". Este ejecutara la aplicacion y mostrara un menu en consola.
 
-MiniSearchEngine/SearchEngineCore/SearchConsole/README.md
-
-
-
-
-OPCIONAL para la ejecución del pre-procesamiento y la indexación, ingresar a los siguientes archivos
-
-MiniSearchEngine/SearchEngineCore/Indexing/README.md
-
-MiniSearchEngine/SearchEngineCore/PreProcessing/README.md
 
