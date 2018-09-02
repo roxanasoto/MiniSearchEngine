@@ -8,26 +8,31 @@ Integrantes:
 2. Solange Ramos Cooper
 3. Soto Barrera Roxana
 
-Este proyecto tiene tres partes
+Este proyecto presenta los siguientes modulos.
 
-- Preprocessing
-- Indexing
-- SearchConsole
+- 1.Preprocessing: En esta modulo se procesa el dataset para su correcto indexamiento.
+- 2.Indexing: En este modulo se indexan en la estructura de datos las palabras antes procesadas.
+- 3.SearchConsole: Este modulo ejecuta la aplicacion para realizar las consultas.
 
-Cada parte se ejecuta de forma independiente. 
+Pasos para la instalacion/ejecucion de la aplicacion
+----------------------------------------------------
+Para ejecutar la aplicacion debe seguir los siguientes pasos:
+- Paso 0: 
+- Paso 1: Descargue el dataset de palabras a indexar.
+- Paso 2: Ejecute el modulo de preprocesamiento.
+- Paso 3: Descargue los archivos necesarios para el indexamiento.
+- Paso 4: Ejecute la aplicacion.
 
-Ingresar a Readme.md de cada carpeta.
+Desarrollo de los pasos
+-----------------------
 
-Para la ejecución del programa, leer las indicaciones del siguiente archivo
----------------------------------------------------------------------------
-Para ejecutar el programa debe seguir los siguientes pasos:
-- Paso 1: Descargar el dataset de palabras a indexar.
-- Paso 2: Ejecutar el modulo de preprocesamiento.
-- Paso 3: Descargar los archivos necesarios para el indexamiento.
-- Paso 4: Ejecutar la aplicacion.
+## Paso 1: Descargue el dataset de palabras a indexar.
 
-Explicacion
------------
+## Paso 2: Ejecute el modulo de preprocesamiento.
+
+## Paso 3: Descargue los archivos necesarios para el indexamiento.
+
+## Paso 4: Ejecute la aplicacion
 
 MiniSearchEngine/SearchEngineCore/SearchConsole/README.md
 
