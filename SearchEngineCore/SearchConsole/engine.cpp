@@ -109,9 +109,14 @@ void MakeSearch(vector<string>& queryWords)
  	//vector<string> oracion; 
     //oracion.push_back("historia"); oracion.push_back("computacion");
  	if(queryWords.size() == 1){
-         Node* rpta = trie2->Find(queryWords[0]);    
-        Row row = trie2->cloud->getRow(rpta->GetCounter());
+        Node* rpta = trie2->Find(queryWords[0]);  
+        if(rpta!=NULL){
+            Row row = trie2->cloud->getRow(rpta->GetCounter());
+
         listIds = row.docs;
+        }
+        
+
     }
     else{
         listIds = trie2->search_sentence(queryWords);

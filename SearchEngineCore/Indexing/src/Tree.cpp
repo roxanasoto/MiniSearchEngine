@@ -293,18 +293,22 @@ int Tree::searchMiss(string key){
 		cout<<"Quizas quizo decir:"<<endl;
 		distanceMax=4;
     	do{
+    		//cout<<"pase x aquii do-while"<<endl;
 			searchMRecursive(key,rpta->Child(),suggestionsRec);
 			distanceMax++;
+
 		}while(suggestionsRec.size()==0);
 
-    	for(auto suggest:suggestionsRec)
-    	{
-
+    	for(auto suggest:suggestionsRec){
+    		//cout << *it;
+    		//cout<<"pase x aqui";
     		cout<<suggest.data()<<endl;
     	}
+    		//cout<<"salio del for"<<endl;
+
 	}
 	else
-		cout<<"no hay mas que buscar";
+		cout<<"no hay mas que buscar"<<endl;
     
     return suggestionsRec.size();
 }
@@ -328,6 +332,7 @@ Node* Tree::Find(string key) {
 		
 	}
 	return rpta;
+
 }
 Node* Tree::Find(Node* node, string key) {
 	if (!node) {
