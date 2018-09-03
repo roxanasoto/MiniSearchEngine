@@ -22,6 +22,7 @@ private:
 	int avance;
 	bool miss=false;
 	string missword;
+	int distanceMax=4;
 public:
 Cloud* cloud;
 	Tree();
@@ -61,5 +62,6 @@ Cloud* cloud;
 	void searchRecursive(string key, Node* rpta, vector<string> &suggestionsRec );/******************************************************* Add Roxana******************/
 	void searchMRecursive(string key, Node* rpta, vector<string> &suggestionsRec );/******************************************************* Add Roxana******************/
 	int searchMiss(string key);
+	Node* FindM(Node* node, string key);
 	// bool Insert(Word);
 };

@@ -2,7 +2,8 @@
 #include <dirent.h>
 #include <cstring>
 #include <memory>
-#include "include/parser.h"
+// #include "include/parser.h"
+// #include "../PreProcessing/include/parser.h"
 #include "include/Tree.h"
 
 using namespace std;
@@ -108,50 +109,221 @@ vector<string> GetDirectoryFiles(const string& dir)
   	return files;
 }
 
+vector<WordList*> wordsListVector;
+
+void LoadWordListFile()
+{
+    cout<<"LoadWordListFile"<<endl;
+    
+    ifstream ifs;
+    int count = 0;
+    map<string, int> wordsList;
+    ifs.open("../../../../WordList.txt");    
+    if (ifs.is_open()){
+        string docId, word, frecuency, line_content;				
+        istringstream iss;
+
+            while (!ifs.eof()){
+                docId = "";  
+                line_content = "";          
+                map<string, int>::iterator it_ins = wordsList.begin();
+                WordList* wordListObj = new WordList();
+                getline(ifs, docId);
+                if(docId.compare(" ") != 0 && docId.compare("") != 0){
+                    getline(ifs, line_content, '/');            
+                    iss.str(line_content);
+                    while(iss >> word){                    
+                        iss >> frecuency;
+                        //cout<<"word: " <<word <<" frecuency: "<<frecuency<<endl;
+                        wordsList.insert(it_ins, pair<string,int>(word,stoi(frecuency)));
+                        it_ins++;                                                                
+                    }
+                    iss>>word;
+                    wordListObj->docId = stoi(docId);
+                    wordListObj->wordList = wordsList;
+                    wordsListVector.push_back(wordListObj);
+                    
+                    //cout<<"Doc Id: "<<wordListObj->docId<<endl;
+                    //cout<<"Amount of Words: "<<wordListObj->wordList.size()<<endl;
+                    iss.clear();
+                    wordsList = {};                    
+                    // cout<<++count<<endl;
+                }
+            }        
+	}
+    else{
+        cout<<"ERROR opening the file" <<endl;        
+    }
+
+    cout<<"N: "<<wordsListVector.size()<<endl;
+}
+
+void buscar_palbra(string palabra, Tree* trie){
+	Node* n = trie->Find(palabra);
+	if(n!=0){
+		cout<<"id_word: "<<n->idx<<" frequencia ahora id: "<<n->GetCounter()<<endl;
+		cout<<"numero de docs: "<<trie->cloud->getRow(n->GetCounter()-1).docs.size()<<endl;
+		cout<<"documentos: "<<trie->cloud->string_ids_of_row(n->GetCounter()-1)<<endl;
+	}
+}
+void buscar_oracion(vector<string> oracion, Tree* trie){
+	vector<int> documents = trie->search_sentence(oracion);
+
+	// Node* n = trie->Find(palabra);
+	// if(n!=0){
+	// 	cout<<"id_word: "<<n->idx<<" frequencia ahora id: "<<n->GetCounter()<<endl;
+	// 	cout<<"numero de docs: "<<trie->cloud->getRow(n->GetCounter()-1).docs.size()<<endl;
+	// 	cout<<"documentos: "<<trie->cloud->string_ids_of_row(n->GetCounter()-1)<<endl;
+	// }
+}
+void comprobar(Tree* trie, string str, int n_docs){
+	 map<string,int>::iterator it;
+	 int count=0;
+	for(int i=0;i< n_docs;i++){
+		it = wordsListVector[i]->wordList.find(str);
+		if(it!=wordsListVector[i]->wordList.end()){
+			count++;
+			cout<<"docs de "<<str<<": " <<wordsListVector[i]->docId<<endl;
+		}
+	}
+		cout<<"count: "<<count<<endl;
+}
 int main()
 {
-	Tree* trie = new Tree();
-	Parser *parser = new Parser();
-	WordList *wordlist = new WordList();
-	// string directory_path = string("../../../DocsTest");
-	// string directory_path = string("/Docs-mini");
-	// vector<string> files = GetDirectoryFiles(directory_path);
-  		  
-	parser->LoadStopWords("../stopWords.txt");	
-	
-	int i=1;
-	bool newDoc = true;	
-	clock_t start,end;
+// 	Tree* trie = new Tree();
+// 	LoadWordListFile();
+// 	clock_t start,end;
+// 	int n_docs = wordsListVector.size();
+
+// 	// comprobar(trie,"nacimientos",n_docs);
+// 	start = clock();
+// 	for(int i=0;i< n_docs;i++){
+// 		trie->indexDocument(wordsListVector[i]);
+// 		cout<<"doc "<<i+1<<" de "<<n_docs<<endl;
+// 	}
+// 	end = clock();
+// 	cout<<"Total Time Processing (loading): "<<(end - start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
 
 	string persistence_tree = "persistence_tree.txt";
 	string persistence_cloud = "persistence_cloud.txt";
-	
-	// delete trie;
+// // //----------------------------------- asignar id a cada palabra
+// trie->setIds(); //verifica si el contador es >0 y guarda el id en el campo idx del nodo;
+
+// cout<<"-------------persistiendo--------------"<<endl;
+// clock_t start_save,end_save;
+// start_save = clock();
+// 	trie->Save(persistence_tree);
+// end_save = clock();
+// cout<<"Total Time Saving: "<<(end_save - start_save)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+
+// cout<<"-------------buscando--------------"<<endl;
+// buscar_palbra("nacimientos",trie);
+
 
 cout<<"----test load---------"<<endl;
 	Tree* trie2 = new Tree();
 	clock_t start_l,end_l;
 	start_l = clock();
-	trie2->Load(persistence_tree);
+	trie2->Load(persistence_tree); //se cargara el id en counter-???
 	end_l = clock();
 	cout<<"Total Time Processing (loading): "<<(end_l - start_l)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
-	
-// 	// cout<<"----printing trie2---------"<<endl;
-// 	// trie2->printTree();
 
-	cout<<"----probando load cloud---------"<<endl;
+
+// // 	cout<<"total de palabras indexadas: "<<trie2->contador<<endl;
+
+	//-------------------------Cloud cargar palbras de documentos
+// 	LoadWordListFile();
+// // // 	//---------------buscar palabras en arbol para asociar documentos a palabras
+// 	 clock_t start,end;
+// 	int n_docs = wordsListVector.size();
+// 	int n_words = trie2->countWords(); //1367397
+// 	cout<<"no tottal words: "<<n_words<<endl;
+// 	trie2->cloud->resizeCloud(trie2->contador);
+// 	cout<<"contador del trie: "<<trie2->contador<<endl;
+// 	start = clock();
+// 	for(int i=0;i< n_docs;i++){
+// 		trie2->buildCloud(wordsListVector[i]);
+// 		cout<<" Cloud->doc "<<i+1<<" de "<<n_docs<<endl;
+// 	}
+// 	end = clock();
+// 	cout<<"Total Time Cloud (building): "<<(end - start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+// // // // ----------------------------------ordenar los docs por frecuencia;
+// cout<<"sorting Cloud"<<endl;
+// trie2->cloud->sort_by_frequency();
+	
+// // // ----------------------------------persistir cloud;	
+// 	cout<<"persistiendo Cloud"<<endl;
+// start = clock();
+// 	trie2->SaveCloud(persistence_cloud);
+// end = clock();
+// cout<<"Total Time Cloud (saving): "<<(end - start)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
+	
+	cout<<"-----------------------------------------probando load cloud---------"<<endl;
 	trie2->LoadCloud(persistence_cloud);
 	
-	// trie2->printCloud();
+	buscar_palbra("nacimiintos",trie2);
+	// vector<string>
+	// buscar_osracion();
+	
+	
+	
+	
+	// trie2->printTree();
+// cout<<"total de palabras indexadas: "<<trie2->contador<<endl;
 
-// 	cout<<"----test busqueda(n palabras)---------"<<endl;
-// 	vector<string> oracion; oracion.push_back("historia"); oracion.push_back("computacion");
-// 	trie2->search_sentence(oracion);
+	// cout<<"----test busqueda(1 palabras)---------"<<endl;
+	// Node* res =trie2->Find("nacimientos");	
+	// cout<<"se encontro: "<<res->GetCounter()<<" resultados de: "<<res->GetKey()<<endl;
+
+	// Node* res2 =trie2->Find("nacimiento");	
+	// cout<<"se encontro: "<<res2->GetCounter()<<" resultados de: "<<res2->GetKey()<<endl;
 
 
-	cout<<"----test busqueda(1 palabras)---------"<<endl;
-	trie2->Find("nacimientos");
+	//---------------------------------------------------------------------------------------------
+	// Tree* trie = new Tree();
+	// Parser *parser = new Parser();
+	// WordList *wordlist = new WordList();
 
+
+	// string directory_path = string("../../../DocsTest");
+	// string directory_path = string("/Docs-mini");
+// 	// vector<string> files = GetDirectoryFiles(directory_path);
+  		  
+	// parser->LoadStopWords("../stopWords.txt");	
+	// wordlist->docId = 0;
+	// wordlist->wordList = {};
+	// wordlist->wordList = parser->ParseFile("../Docs-mini/d2.txt");
+	// printWordList(wordlist);
+	// trie->indexDocument(wordlist);
+	
+	// trie->printTree();
+
+	
+// 	int i=1;
+// 	bool newDoc = true;	
+// 	clock_t start,end;
+
+
+	
+// 	// delete trie;
+
+
+	
+// // 	// cout<<"----printing trie2---------"<<endl;
+// // 	// trie2->printTree();
+
+
+	
+// 	// trie2->printCloud();
+
+// // 	cout<<"----test busqueda(n palabras)---------"<<endl;
+// // 	vector<string> oracion; oracion.push_back("historia"); oracion.push_back("computacion");
+// // 	trie2->search_sentence(oracion);
+
+
+// 	cout<<"----test busqueda(1 palabras)---------"<<endl;
+// 	trie2->Find("nacimientos");
+//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -168,43 +340,8 @@ cout<<"----test load---------"<<endl;
 // end_search = clock();
 
 // cout<<"Total Time Searching: "<<(end_search - start_search)/(double)CLOCKS_PER_SEC <<" seconds."<< endl;
-	
 
-	// trie.Insert("opera",1,8,5);
-	// trie.printTree();
-
-	// trie.Insert("ope",1,14,6);
-	// trie.printTree();
-
-	// trie.Insert("o",1,1,7);
-	// trie.printTree();
-
-	// trie.Insert("ombligo",1,5,3);
-	// trie.Insert("ombligo",1,6,4);
-	// trie.printTree();
 	
-	// trie.Insert("ombligos",1,1,7);
-	// trie.printTree();
-	
-	// cout<<"----test busqueda(1 palabra)---------"<<endl;
-	// trie.search("historia");
-	// trie.search("cana");
-	// trie.search("africa");
-	// trie.search("david");
-	// trie.search("himno");
-	// trie.search("test");
-	// 	cout<<"----test busqueda(n palabras)---------"<<endl;
-	// 	vector<string> oracion; oracion.push_back("historia"); oracion.push_back("computacion");
-	// trie.search(oracion);
-	
-	// trie.search("historia");
-	
-	// cout<<"----test busqueda(n palabras)---------"<<endl;
-	// masive_search(&trie);
-
-	// string entrada;
-	// cin>>entrada;
-	// cout<<"escribiste esto?: "<<entrada<<endl;
 
 	
 
@@ -215,12 +352,10 @@ cout<<"----test load---------"<<endl;
 	// wordlist->docId = 0;
 	// wordlist->wordList = {};
 	// wordlist->wordList = parser->ParseFile("../Docs-mini/d2.txt");
-	// printWordList(wordlist);
-	// trie->indexDocument(wordlist);
+	// // printWordList(wordlist);
+	// // trie->indexDocument(wordlist);
 	
-
-	// trie.Insert("hermandad",1,3,1);
-	// trie->printTree();
+	// // trie->printTree();
 
 	// // trie.Insert("himno",1,2,1);
 	// // trie.printTree();

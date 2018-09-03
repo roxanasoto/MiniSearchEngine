@@ -257,14 +257,16 @@ void Tree::searchMRecursive(string key, Node* rpta, vector<string> &suggestionsR
 	if(suggestionsRec.size() >= 21){
 		return;
 	}
-    if(rpta->noTuples() > 0){
+    if(rpta->GetCounter()!=-1){
     	
-    	if(distanceHamming(missword,keynew)<4)
+
+    	if(distanceHamming(missword,keynew)<distanceMax)
     	{
-    		cout<<keynew<<endl;
+    		//cout<<keynew<<endl;
     		//cout<<missword<<"+"<<keynew<<"="<<distanceHamming(missword,keynew)<<endl;
     		suggestionsRec.push_back(keynew);
     	}
+		
     }
     if(rpta->Brother() !=NULL){
     	searchMRecursive(key,rpta->Brother(),suggestionsRec);
@@ -275,36 +277,55 @@ void Tree::searchMRecursive(string key, Node* rpta, vector<string> &suggestionsR
 }
 
 int Tree::searchMiss(string key){
-
+	
 	avance=0;
-	Node* rpta =Find(root, key);
+	Node* rpta =FindM(root, key);
 	vector<string> suggestionsRec;
 	//verificar que no encontro
+	//cout<<"missword: "<<key<<endl;
 	missword=key;
 	key=key.substr(0,avance);
-	rpta =Find(root, key);
+	//cout<<"key: "<<key<<endl;
+	//cout<<"residuo :"<<residuo<<endl;
+	rpta =FindM(root, key);
+	
 	if(rpta != 0){
-		cout<<key<<endl;
-		cout<<residuo<<endl;
-		
-    	searchMRecursive(key,rpta->Child(),suggestionsRec);
+		cout<<"Quizas quizo decir:"<<endl;
+		distanceMax=4;
+    	do{
+			searchMRecursive(key,rpta->Child(),suggestionsRec);
+			distanceMax++;
+		}while(suggestionsRec.size()==0);
+
+    	for(auto suggest:suggestionsRec)
+    	{
+
+    		cout<<suggest.data()<<endl;
+    	}
 	}
 	else
-		cout<<"no hay más que buscar";
+		cout<<"no hay mas que buscar";
     
     return suggestionsRec.size();
 }
 /*******************************************************FIN Add Roxana******************/
 
 Node* Tree::Find(string key) {
-	//cout<<"Buscando: "<<key<<"..."<<endl;
+	cout<<"Buscando: "<<key<<"..."<<endl;
 	Node* rpta = Find(root, key);
 	if(rpta != 0){
+		cout<<"entro  search";
+
 		Row row = cloud->getRow(rpta->GetCounter());
-		//print_vector(row.docs);
+		print_vector(row.docs);
+
 	}
 	else{
+		
+		
+
 		searchMiss(key);
+		
 	}
 	return rpta;
 }
@@ -319,19 +340,59 @@ Node* Tree::Find(Node* node, string key) {
 		}
 		else{
 			residuo=node->GetKey();
-			return node;
+			return 0;
 		}
 	} if (k < node->GetLength()) {//el nodo actual no esta particionado para el prefijo buscado
 		//cout<<k<<" "<<node->GetLength()<<endl;
 		residuo=node->GetKey().substr(k);//ADD..........................................................    Rox
-		return node;//ADD................................................................................    Rox
+		// miss = true;
+		return 0;//ADD................................................................................    Rox
 	} if (k == key.length()) {
 		// if(node->noTuples()>0)
 		if(node->GetCounter()!=-1)
 			return node;
+		// miss = true;
 		return 0;
 	}
+	// avance+=k;
 	return Find(node->Child(), key.substr(k, key.length()));
+}
+Node* Tree::FindM(Node* node, string key) {
+
+	if (!node) {
+		return 0;
+	}
+
+	unsigned int k = Prefix(key, node->GetKey());
+
+	if (k == 0) {//cadenas diferentes
+		//cout<<"cadena diferentes: "<<node->GetKey()<<endl;
+		if(node->Brother()){
+			return FindM(node->Brother(), key); // letï¿½s look for the childï¿½s node
+		}
+		else{
+			residuo=node->GetKey();
+			return node;
+		}
+	} 
+
+	if (k < node->GetLength()) {//el nodo actual no esta particionado para el prefijo buscado
+		//cout<<k<<" "<<node->GetLength()<<endl;
+		residuo=node->GetKey().substr(k);//ADD..........................................................    Rox
+		//cout<<"cadena insuficiente: "<<node->GetKey()<<endl;
+		miss=true;
+		return node;//ADD................................................................................    Rox
+	} if (k == key.length()) {
+		// if(node->noTuples()>0)
+		//cout<<"cadena encontrada: "<<node->GetKey()<<endl;
+		if(node->GetCounter()!=-1)
+			return node;
+		miss=true;
+		return node;
+	}
+	avance+=k;
+	//cout<<"cadena sobrante, al hijo: "<<node->GetKey()<<endl;
+	return FindM(node->Child(), key.substr(k, key.length()));
 }
 
 void Tree::Split(Node* node, int k, int freq,int idDoc) { // dividing node according to k key symbol
