@@ -40,7 +40,7 @@ A continuacion descomprima el archivo en la carpeta que creo en el paso 0. En es
 - Dirijase a la carpeta "MiniSearchEngine/SearchEngineCore/PreProcessing/" y cree en esta misma una carpeta con el nombre "build" (sin comillas).
 - Abra una terminal y dirijase a la carpeta build que creo anteriormente. (Use el comando "cd ").
 - En la terminal ejecute el comando: "cmake .." (Sin comillas. Es necesario que tenga instalado cmake).
-- A continuacion ejecute el comando: "make .." (este comando generara un ejecutable con nombre: "preprocess")
+- A continuacion ejecute el comando: "make" (este comando generara un ejecutable con nombre: "preprocess")
 - Ejecute el ejecutable antes creado con el comando: "./preprocess". Este comando creara documentos en la carpeta "Docs" que creo en el paso 1.
 
 ## Paso 3: Descargue los archivos necesarios para el indexamiento.
@@ -50,7 +50,7 @@ A continuacion descomprima el archivo en la carpeta que creo en el paso 0. En es
 - Guarde los archivos descargados en la carpeta build que creo anteriormente.
 - Abra una terminal y dirijase (con el comando cd) a la carpeta build que creo anteriormente.
 - En la terminal ejecute el comando: "cmake .." (Sin comillas. Es necesario que tenga instalado cmake).
-- A continuacion ejecute el comando: "make .." (este comando generara un ejecutable con nombre: "engine")
+- A continuacion ejecute el comando: "make" (este comando generara un ejecutable con nombre: "engine")
 
 
 ## Paso 4: Ejecute la aplicacion
