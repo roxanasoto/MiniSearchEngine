@@ -261,7 +261,7 @@ cout<<"----test load---------"<<endl;
 	cout<<"-----------------------------------------probando load cloud---------"<<endl;
 	trie2->LoadCloud(persistence_cloud);
 	
-	buscar_palbra("nacimiintos",trie2);
+	buscar_palbra("comida",trie2);
 	// vector<string>
 	// buscar_osracion();
 	

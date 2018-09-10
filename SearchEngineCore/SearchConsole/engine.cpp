@@ -111,7 +111,7 @@ void MakeSearch(vector<string>& queryWords)
  	if(queryWords.size() == 1){
         Node* rpta = trie2->Find(queryWords[0]);  
         if(rpta!=NULL){
-            Row row = trie2->cloud->getRow(rpta->GetCounter());
+            Row row = trie2->cloud->getRow(rpta->GetCounter()-1);
 
         listIds = row.docs;
         }
