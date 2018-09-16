@@ -315,13 +315,13 @@ int Tree::searchMiss(string key){
 /*******************************************************FIN Add Roxana******************/
 
 Node* Tree::Find(string key) {
-	cout<<"Buscando: "<<key<<"..."<<endl;
+	//cout<<"Buscando: "<<key<<"..."<<endl;
 	Node* rpta = Find(root, key);
 	if(rpta != 0){
-		cout<<"entro  search";
+		//cout<<"entro  search";
 
-		Row row = cloud->getRow(rpta->GetCounter());
-		print_vector(row.docs);
+		//Row row = cloud->getRow(rpta->GetCounter());
+		//print_vector(row.docs);
 
 	}
 	else{
